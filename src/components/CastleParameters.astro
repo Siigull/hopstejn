@@ -1,0 +1,63 @@
+---
+import { parseParameters } from '@utils/all'
+import { Icon } from 'astro-icon/components'
+const { castle } = Astro.props
+
+function pudorys(special: any) {
+    if (!special) {
+        return "Půdorys "
+    } else {
+        return "Půdorys(šířka, délka) "
+    }
+}
+
+function vybaveni(vybaveni: any) {
+    return vybaveni.split("\n")
+}
+
+function kapacita(kapacita: any) {
+    if (kapacita) {
+        return "<div class=\"flex justify-around\"><div> Kapacita </div><div> { castle.popis.kapacita } </div></div>"
+    }
+}
+---
+<div class="flex">
+    <div class="w-1/2 grid grid-cols-1">
+      <div class="flex justify-around">
+        <div> { pudorys(castle.special) } </div>
+        <div> { parseParameters(castle.parametry) } </div>
+      </div>
+      <div class="flex justify-around">
+        <div> Výška </div>
+        <div> { castle.parametry.z } m </div>
+      </div>
+      <div class="flex justify-around">
+        <div> Druh designu </div>
+        <div> { castle.popis.druh } </div>
+      </div>
+      <div class="flex">
+        <div class="w-1/2"> Materiál </div>
+        <div class="w-1/2"> { castle.popis.material } </div>
+      </div>
+      { castle.popis.kapacita &&
+        <div class="flex justify-around">
+					<div> Kapacita </div>
+					<div> { castle.popis.kapacita } </div>
+        </div>
+      }
+    </div>
+    <div>
+        <div class="flex">
+            <div class="grid grid-cols-1">
+                <h3> Vybavení </h3>
+                { vybaveni(castle.popis.vybaveni).map((el: any) => (
+                    <div>
+                        { el }
+                    </div>
+                  )) 
+                }
+            </div>
+            <Icon name="mdi:package-variant-closed-check" size="100"/>
+        </div>
+    </div>
+  </div>

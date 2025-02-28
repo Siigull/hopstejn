@@ -5,6 +5,15 @@
 @use 'breakpoint' as *;
 
 @font-face {
+  font-family: 'Gill Sans';
+  src: local('Gill Sans Nova Heavy'), local('GillSansNova-Heavy'), url('/fonts/GillSansNove-Heavy.ttf') format('ttf'),
+    url('/fonts/GillSansNova-Heavy.ttf') format('ttf');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: 'Open Sans';
   src: local('Open Sans ExtraBold'), local('OpenSans-ExtraBold'), url('/fonts/OpenSans-ExtraBold.woff2') format('woff2'),
     url('/fonts/OpenSans-ExtraBold.woff') format('woff');
@@ -129,7 +138,7 @@ body {
 
   h5 {
     font-size: 1.125rem;
-    line-height: 1.6875rem;
+    line-height: 1.5rem;
 
     @include breakpoint(medium) {
       font-size: 1.25rem;
@@ -138,8 +147,6 @@ body {
         font-size: 1rem;
       }
     }
-
-    line-height: 1.5rem;
 
     @include breakpoint(medium) {
       font-size: 1.125rem;

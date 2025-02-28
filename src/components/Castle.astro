@@ -1,0 +1,12 @@
+---
+import { type Castle } from '../models/types';
+interface Props {
+  castle: Castle;
+}
+
+const { castle } = Astro.props;
+---
+
+<p>
+  { castle.name }
+</p>

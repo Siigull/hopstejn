@@ -1,0 +1,43 @@
+---
+import DefaultLayout from "@layouts/DefaultLayout.astro"
+import { Breadcrumbs, BreadcrumbsItem } from 'accessible-astro-components'
+import CastleList from '@components/CastleList.astro'
+
+import { db } from '@utils/db'
+
+export const prerender = true
+
+export async function getStaticPaths({ paginate }) {
+    const castles = await db.query.castles.findMany({
+        where: (castles, { eq }) => eq(castles.type, 2),
+        columns: {
+            name: true,
+            type: true,
+            id: false,
+        },
+        with: {
+            popis: true,
+            parametry: true,
+            images: true,
+            popis_pronajem: true,
+        }
+    })
+
+  return paginate(castles, { pageSize: 15 })
+}
+
+const { page } = Astro.props
+---
+
+<DefaultLayout title="Pronájem">
+    <div class="breadcrumbs">
+        <div class="container">
+        <Breadcrumbs>
+            <BreadcrumbsItem href="/" label="Domov" />
+            <BreadcrumbsItem href="/atrakce/pronajem/" label="Pronájem" />
+            <BreadcrumbsItem href="/atrakce/pronajem/skluzavky/" label="Skluzavky" />
+        </Breadcrumbs>
+        </div>
+    </div>
+    <CastleList page={ page }></CastleList>
+</DefaultLayout>

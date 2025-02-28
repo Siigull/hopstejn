@@ -1,0 +1,210 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro'
+import { Breadcrumbs, BreadcrumbsItem } from 'accessible-astro-components'
+import { Icon } from 'astro-icon/components'
+
+import { removeDiacritics } from '@utils/all'
+import { db } from '@utils/db'
+
+import CastleDescription from '@components/CastleDescription.astro'
+import CastleParameters from '@components/CastleParameters.astro'
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const castles = await db.query.castles.findMany({
+        columns: {
+            name: true,
+            type: true,
+            id: false,
+        },
+        with: {
+            popis: true,
+            parametry: true,
+            images: true,
+            popis_pronajem: true,
+        }
+    })
+
+  return castles.map((castle) => {
+    return {
+      params: { castle: removeDiacritics(castle.name).replaceAll(' ', '-').toLowerCase() },
+      props:  { castle },
+    }
+  })
+}
+
+const { castle } = Astro.props
+---
+
+<DefaultLayout title={castle.name} description="hrad" url={castle.name}>
+    <div class="breadcrumbs">
+      <div class="container">
+        <Breadcrumbs>
+          <BreadcrumbsItem href="/" label="Domov" />
+          <BreadcrumbsItem href="/atrakce/pronajem" label="Pronájem" />
+          <BreadcrumbsItem currentPage={true} label={castle.name} />
+        </Breadcrumbs>
+      </div>
+    </div>
+    <div class="container">
+      <div class="flex">
+        <div class="w-1/2 grid grid-cols-1">
+          <div class="expanded-container">
+            <button id="prevButton" class="prev-button">
+              <Icon name="mdi:chevron-left" size="50"/>
+            </button>
+            <div class="expanded-image-container aspect-square">
+              <img id="expandedImg" style="width:100%" src={"/img/hrady/" + castle.images[0].path}>
+            </div>
+            <button id="nextButton" class="next-button">
+              <Icon name="mdi:chevron-right" size="50"/>
+            </button>
+          </div>
+          <div class="grid grid-cols-4 gap-4">
+            {
+              castle.images.map((image, index) => (
+                <div class="gallery-image-container aspect-square">
+                  <img id={String(index)} class="galleryImg" src={"/img/hrady/" + image.path} alt={image.path} />
+                </div>
+              ))
+            }
+          </div>
+        </div>
+        <div>
+          <CastleDescription castle={castle}></CastleDescription>
+        </div>
+      </div>
+    </div>
+    <div class="parameters-container">
+      <div class="container">
+        <CastleParameters castle={castle}></CastleParameters>
+      </div>
+    </div>
+
+    <!-- <section class="my-12">
+      <div class="container">
+        <h1>{castle.name}</h1><br />
+      </div>
+    </section>
+    <section class="my-12">
+      <div class="container">
+        <p class="text-2xl">{ castle.parametry.x }</p>
+      </div>
+    </section> -->
+
+  </DefaultLayout>
+<script>
+  function init() {
+    var expanded_img_id = 0;
+    var max_img: number;
+
+    function prev() {
+      let expand_img = document.getElementById("expandedImg")! as HTMLImageElement;
+
+      expanded_img_id -= 1;
+      let next_img = document.getElementById(String(expanded_img_id)) as HTMLImageElement;
+
+      if (next_img == null) {
+        expanded_img_id = max_img;
+        next_img = document.getElementById(String(expanded_img_id)) as HTMLImageElement;
+      }
+
+      expand_img.src = next_img.src;
+    }
+
+    function next() {
+      let expand_img = document.getElementById("expandedImg")! as HTMLImageElement;
+
+      expanded_img_id += 1;
+      let next_img = document.getElementById(String(expanded_img_id)) as HTMLImageElement;
+      
+      if (next_img == null) {
+        expanded_img_id = 0;
+        next_img = document.getElementById(String(expanded_img_id)) as HTMLImageElement;
+      }
+
+      expand_img.src = next_img.src;
+    }
+
+    function maximize(imgs: HTMLImageElement) {
+      let expand_img = document.getElementById("expandedImg")! as HTMLImageElement;
+      expand_img.src = imgs.src;
+      expanded_img_id = Number(imgs.id)
+      // expand_img.parentElement!.style.display = "block";
+    }
+
+    const imgs = document.querySelectorAll('.galleryImg');
+
+    const next_button = document.getElementById("nextButton")! as HTMLButtonElement;
+    next_button.addEventListener('click' , () => next())
+
+    const prev_button = document.getElementById("prevButton")! as HTMLButtonElement;
+    prev_button.addEventListener('click' , () => prev())
+    
+    imgs.forEach((img, index) => {
+      img.addEventListener('click', () => maximize(img as HTMLImageElement));
+      max_img = index;
+    });
+  }
+
+  init()
+
+  document.addEventListener("astro:after-swap", init)
+</script>
+
+<style lang="scss">
+  img {
+    padding: 10%;
+    height: 100%;
+    width: 100%;
+  }
+
+  .expanded-container {
+    position: relative;
+  }
+
+  .prev-button {
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    left: 10px;
+  }
+
+  .next-button {
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    right: 10px;
+  }
+
+  .gallery-image-container img {
+    object-fit: cover;
+  }
+
+  .gallery-image-container img:hover {
+    opacity: 0.8;
+    cursor: pointer;
+  }
+
+  .expanded-image-container img {
+    object-fit: contain;
+    padding-bottom: 10px;
+  }
+
+  .parameters-container {
+    background-color: var(--neutral-400);
+  }
+
+  button {
+    border: none;
+  }
+
+  svg {
+    filter: 
+      drop-shadow(-1px 0px 0px #ffffff) 
+      drop-shadow(1px 0px 0px #ffffff) 
+      drop-shadow(0px -1px 0px #ffffff)
+      drop-shadow(0px 1px 0px #ffffff)
+  }
+</style>

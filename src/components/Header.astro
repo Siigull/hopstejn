@@ -1,7 +1,6 @@
 ---
 import Navigation from '../components/Navigation.astro'
 import { SkipLinks } from 'accessible-astro-components'
-import { Icon } from 'astro-icon/components'
 ---
 
 <header>
@@ -14,10 +13,10 @@ import { Icon } from 'astro-icon/components'
       <button aria-haspopup="true" aria-expanded="false">Atrakce</button>
       <ul class="dropdown-menu">
         <li class="submenu-item">
-          <a href="/vyroba/">Výroba</a>
+          <a href="/atrakce/vyroba/">Výroba</a>
         </li>
         <li class="submenu-item">
-          <a href="/pronajem/">Pronájem</a>
+          <a href="/atrakce/pronajem/">Pronájem</a>
         </li>
       </ul>
     </li>
@@ -42,6 +41,9 @@ import { Icon } from 'astro-icon/components'
   @use '../assets/scss/base/outline' as *;
 
   header {
+    background-color: var(--primary-600);
+    color: var(--neutral-100);
+
     .type-icon a {
       display: block;
 

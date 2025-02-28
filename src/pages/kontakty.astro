@@ -1,0 +1,46 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro'
+import { Breadcrumbs, BreadcrumbsItem } from 'accessible-astro-components'
+import { Image } from 'astro:assets'
+import cat from '../assets/img/cat.webp'
+---
+
+<DefaultLayout title="O nás">
+  <div class="breadcrumbs">
+    <div class="container">
+      <Breadcrumbs>
+        <BreadcrumbsItem href="/" label="Domov" />
+        <BreadcrumbsItem href="/kontakty/" label="Kontakty" />
+      </Breadcrumbs>
+    </div>
+  </div>
+  <div class="container">
+    <h1 class="m-10 ml-0">Kontakty</h1>
+    <div class="container mx-auto p-4 flex flex-col md:flex-row items-center md:items-start">
+        <div class="text pr-0 md:pr-20 mb-4 md:mb-0 md:mr-4 w-full md:w-1/2">
+            <div class="grid grid-flow-row auto-rows-max">
+                <div class="pb-5">
+                    <div>Hopštejn spol. s r.o. – Ing. Jiří Hájek</div>
+                    <div>skákací hrady – výroba a půjčovna</div>
+                </div>
+                <div class="grid grid-flow-col auto-cols-max justify-between">
+                    <div>
+                        <div>Ořešínská 83/3</div>
+                        <div>621 00 Brno</div>
+                        <div>IČO: 292 79 551</div>
+                    </div>
+                    <div>
+                        <div>+420 541 237 011</div>
+                        <div>+420 603 445 928</div>
+                        <div>e-mail: hopstejn@hopstejn.cz</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="image w-full md:w-1/2">
+            <Image src={cat} alt="todo"/>
+        </div>
+    </div>
+  </div>
+</DefaultLayout>

@@ -1,0 +1,71 @@
+---
+import Card from '@components/Card.astro'
+import FilterSidebar from '@components/FilterSidebar.astro'
+import { Pagination } from 'accessible-astro-components'
+import { removeDiacritics, parseParameters } from "@utils/all"
+
+const { page } = Astro.props
+---
+
+<section class="my-12">
+    <div class="container">
+        <div class="flex">
+            <div class="md:w-1/4">
+                <FilterSidebar></FilterSidebar>
+                <!-- <Image src={cat} alt="todo"/> -->
+            </div>
+            <div class="my-20 md:my-0">
+                <ul class="">
+                {
+                    page.data.map((castle: any) =>(
+                        <li class={ castle.type }>
+                            <Card
+                                url={ "/atrakce/pronajem/" + removeDiacritics(castle.name).replaceAll(' ', '-').toLowerCase() }
+                                img={ "/img/hrady/" + castle.images[0].path}
+                                title={ castle.name }
+                                footer=""
+                            >
+                                {
+                                    parseParameters(castle.parametry) + " x " +
+                                    castle.parametry!.z + "m"
+                                }
+                                <br>
+                                {
+                                    castle.popis_pronajem?.cena + " / " + castle.popis_pronajem?.cena_hodina + "Kč"
+                                }
+                            </Card>
+                        </li>
+                    ))
+                }
+                </ul>
+                <div class="mt-12 grid place-content-center">
+                    <Pagination
+                        firstPage={page.url.prev ? '/atrakce/pronajem/' : null}
+                        previousPage={page.url.prev ? page.url.prev : null}
+                        nextPage={page.url.next ? page.url.next : null}
+                        lastPage={page.url.next ? `/atrakce/pronajem/${Math.round(page.total / page.size)}` : null}
+                        currentPage={page.currentPage}
+                        totalPages={Math.round(page.total / page.size)}
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style lang="scss">
+    ul {
+      display: grid;  
+      grid-template-columns: 1fr;
+      grid-gap: 4rem;
+
+      @media (min-width: 600px) {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 2rem;
+      }
+  
+      @media (min-width: 950px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+</style>

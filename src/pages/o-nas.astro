@@ -6,8 +6,8 @@ import cat from '../assets/img/cat.webp'
 ---
 
 <DefaultLayout title="O nás">
-  <div class="container">
-    <div class="mt-12">
+  <div class="breadcrumbs">
+    <div class="container">
       <Breadcrumbs>
         <BreadcrumbsItem href="/" label="Domov" />
         <BreadcrumbsItem href="/o-nas/" label="O nás" />
@@ -15,19 +15,24 @@ import cat from '../assets/img/cat.webp'
     </div>
   </div>
   <div class="container">
-    <h1 class="m-10">O nás</h1>
+    <h1 class="m-10 ml-0">O nás</h1>
     <div class="container mx-auto p-4 flex flex-col md:flex-row items-center md:items-start">
         <div class="text pr-0 md:pr-20 mb-4 md:mb-0 md:mr-4 w-full md:w-1/2">
-            HOPŠTEJN se již od roku 1992 zabývá pronájmy a výrobou dětských skákacích hradů, reklamních 
-            nafukovadel a poutačů. V posledních letech naše aktivity směřují ke kompletnímu materiálnímu 
-            zajištění dětských zábavných a soutěžních akcí.
-            Naše výrobky mají své místo v mateřských a základních školách, na akcích typu Den dětí, na 
-            koupalištích, stávají se však nedílnou součástí firemních dnů pro zaměstnance i pro veřejnost, 
-            reklamních a prezentačních akcí. apod. Jsou také vhodným doplňkem dětských koutů, obchodních domů, 
-            veletrhů a rekreačních a sportovních středisek.
-            Nezůstaňme však pouze u pronájmů. Výrobek ve tvaru či s designem Vaší firmy, Vašeho výrobku se 
-            stane nepřehlédnutelnou dominantou při prezentacích na veřejnosti.
-            Staňte se i Vy našimi zákazníky – my Vás nezklameme!
+            <p>
+                HOPŠTEJN se již od roku 1992 zabývá pronájmy a výrobou dětských skákacích hradů, reklamních 
+                nafukovadel a poutačů. V posledních letech naše aktivity směřují ke kompletnímu materiálnímu 
+                zajištění dětských zábavných a soutěžních akcí. 
+                <br>
+                Naše výrobky mají své místo v mateřských a základních školách, na akcích typu Den dětí, na 
+                koupalištích, stávají se však nedílnou součástí firemních dnů pro zaměstnance i pro veřejnost, 
+                reklamních a prezentačních akcí. apod. Jsou také vhodným doplňkem dětských koutů, obchodních domů, 
+                veletrhů a rekreačních a sportovních středisek. 
+                <br>
+                Nezůstaňme však pouze u pronájmů. Výrobek ve tvaru či s designem Vaší firmy, Vašeho výrobku se 
+                stane nepřehlédnutelnou dominantou při prezentacích na veřejnosti.
+                <br>
+                Staňte se i Vy našimi zákazníky – my Vás nezklameme!
+            </p>
         </div>
         <div class="image w-full md:w-1/2">
             <Image src={cat} alt="todo"/>
@@ -36,7 +41,7 @@ import cat from '../assets/img/cat.webp'
   </div>
 </DefaultLayout>
 
-<style lang="scss">
+<!-- <style lang="scss">
   ul {
     display: grid;
     grid-template-columns: 1fr;
@@ -51,4 +56,4 @@ import cat from '../assets/img/cat.webp'
       grid-template-columns: repeat(3, 1fr);
     }
   }
-</style>
+</style> -->

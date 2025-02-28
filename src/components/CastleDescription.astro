@@ -1,0 +1,38 @@
+---
+const { castle } = Astro.props
+
+function skladem(skladem: any) {
+    if(skladem) {
+        return "Skladem v " + skladem
+    } else {
+        return ""
+    }
+}
+---
+
+<div class="container">
+    <div class="grid grid-cols-1">
+        <div>
+            <h3>{ castle.name }</h3>
+        </div>
+        <div>
+            { castle.popis_pronajem.cena } Kč za 5 hodin, každá další hodina { castle.popis_pronajem.cena_hodina} Kč
+        </div>
+        <div>
+            { castle.popis.hlavni }
+        </div>
+
+        <div>
+            <p> { skladem(castle.popis_pronajem.skladem) }</p>
+            <button>
+                Pronajmout
+            </button>
+        </div>
+    </div>
+</div>
+
+<style lang="scss">
+    .container {
+        margin-top: 20%;
+    }
+</style>

@@ -1,6 +1,5 @@
 ---
 import ResponsiveToggle from './ResponsiveToggle.astro'
-import { DarkMode } from 'accessible-astro-components'
 import { Image } from 'astro:assets'
 import logo from '../assets/img/logo.svg'
 ---
@@ -8,8 +7,14 @@ import logo from '../assets/img/logo.svg'
 <div id="main-navigation" class="is-desktop py-8">
   <div class="container">
     <a href="/" class="flex items-center gap-2 !no-underline">
-      <Image src={logo} alt="Your Logo" width="47" height="37" />
-      <span class="font-bold">Hopštejn</span>
+        <div class="grid grid-flow-row auto-rows-max">
+            <div class="flex justify-center items-center pb-1">
+                <Image src={logo} alt="Your Logo" width="47" height="37" />
+            </div>
+            <div>
+                <span class="font-bold text-xl">HOPŠTEJN</span>
+            </div>
+        </div>
     </a>
     <div class="wrapper">
       <nav class="desktop-menu" aria-label="Main navigation desktop">
@@ -17,7 +22,6 @@ import logo from '../assets/img/logo.svg'
           <slot />
         </ul>
       </nav>
-      <DarkMode />
       <ResponsiveToggle />
     </div>
     <nav class="mobile-menu" aria-label="Main navigation mobile">
@@ -31,23 +35,23 @@ import logo from '../assets/img/logo.svg'
 <script>
   document.addEventListener('astro:page-load', () => {
     // variables
-    const mainNav = document.querySelector('#main-navigation')
-    const mainMenu = mainNav.querySelector('ul')
+    const mainNav = document.querySelector('#main-navigation')!
+    const mainMenu = mainNav?.querySelector('ul')
     const dropdownMenus = [...document.querySelectorAll('.has-dropdown button')]
 
     // functions
     const setActiveMenuItem = () => {
-      const mobileDesktopMenus = mainNav.querySelectorAll('nav > ul')
+      const mobileDesktopMenus = mainNav?.querySelectorAll('nav > ul')
       const currenPathname = window.location.pathname
 
-      mobileDesktopMenus.forEach((menu) => {
+      mobileDesktopMenus?.forEach((menu) => {
         const menuItems = [...menu.querySelectorAll('a:not([rel*="external"])')] as HTMLAnchorElement[]
 
         menuItems.forEach((menuItem) => {
-          if (currenPathname.includes(menuItem.pathname.replaceAll('/', '')) && menuItem.textContent !== 'Home') {
+          if (currenPathname.includes(menuItem.pathname.replaceAll('/', '')) && menuItem.textContent !== 'Domov') {
             menuItem.classList.add('is-active')
             menuItem.setAttribute('aria-current', 'page')
-          } else if (menuItem.textContent === 'Home' && currenPathname === '/') {
+          } else if (menuItem.textContent === 'Domov' && currenPathname === '/') {
             menuItem.classList.add('is-active')
             menuItem.setAttribute('aria-current', 'page')
           }
@@ -56,8 +60,8 @@ import logo from '../assets/img/logo.svg'
     }
 
     const checkMenuSize = () => {
-      const mainNavWidth = mainNav.getBoundingClientRect().width
-      const desktopMenuWidth = document.querySelector('.desktop-menu').getBoundingClientRect().width
+      const mainNavWidth = mainNav!.getBoundingClientRect().width
+      const desktopMenuWidth = document.querySelector('.desktop-menu')!.getBoundingClientRect().width
       const logoWidthBuffer = 300
       const totalMenuWidth = Math.round(desktopMenuWidth) + logoWidthBuffer
 
@@ -70,23 +74,23 @@ import logo from '../assets/img/logo.svg'
       }
     }
 
-    const isOutOfViewport = (element) => {
+    const isOutOfViewport = (element: Element) => {
       const elementBounds = element.getBoundingClientRect()
       return elementBounds.right > (window.innerWidth || document.documentElement.clientWidth)
     }
 
-    const openDropdownMenu = (dropdownMenu) => {
-      const dropdownList = dropdownMenu.parentNode.querySelector('ul')
+		const openDropdownMenu = (dropdownMenu: Element) => {
+			const dropdownList = dropdownMenu.parentNode!.querySelector('ul')
 
-      dropdownMenu.classList.add('show')
-      dropdownMenu.setAttribute('aria-expanded', 'true')
+			dropdownMenu.classList.add('show')
+			dropdownMenu.setAttribute('aria-expanded', 'true')
 
-      if (isOutOfViewport(dropdownList)) {
-        dropdownList.style.left = 'auto'
-      }
+			if (isOutOfViewport(dropdownList!)) {
+				dropdownList!.style.left = 'auto'
+			}
     }
 
-    const closeDropdownMenu = (dropdownMenu) => {
+    const closeDropdownMenu = (dropdownMenu: Element) => {
       dropdownMenu.classList.remove('show')
       dropdownMenu.setAttribute('aria-expanded', 'false')
     }
@@ -97,13 +101,15 @@ import logo from '../assets/img/logo.svg'
       }
     }
 
-    const toggleDropdownMenu = (event) => {
-      if (event.target.getAttribute('aria-expanded') === 'false') {
-        closeAllDropdownMenus()
-        openDropdownMenu(event.target)
-      } else {
-        closeDropdownMenu(event.target)
-      }
+    const toggleDropdownMenu = (event: Event) => {
+			const target = event.target as HTMLElement;
+
+			if (target.getAttribute('aria-expanded') === 'false') {
+				closeAllDropdownMenus()
+				openDropdownMenu(target)
+			} else {
+				closeDropdownMenu(target)
+			}
     }
 
     // execution
@@ -120,7 +126,7 @@ import logo from '../assets/img/logo.svg'
         let targetItem
 
         if (key === 'ArrowRight') {
-          if (menuItems.indexOf(currentMenuItem) === menuItems.length - 1) {
+          if (menuItems.indexOf(currentMenuItem as HTMLLIElement) === menuItems.length - 1) {
             targetItem = menuItems[0]
           } else {
             targetItem = menuItems[currentIndex + 1]
@@ -128,7 +134,7 @@ import logo from '../assets/img/logo.svg'
         }
 
         if (key === 'ArrowLeft') {
-          if (menuItems.indexOf(currentMenuItem) === 0) {
+          if (menuItems.indexOf(currentMenuItem as HTMLLIElement) === 0) {
             targetItem = menuItems[menuItems.length - 1]
           } else {
             targetItem = menuItems[currentIndex - 1]
@@ -140,7 +146,7 @@ import logo from '../assets/img/logo.svg'
         }
 
         if (currentDropdownMenu) {
-          const firstDropdownItem = currentDropdownMenu.nextElementSibling.querySelector('li')
+          const firstDropdownItem = currentDropdownMenu.nextElementSibling!.querySelector('li')
 
           if (key === 'ArrowDown') {
             event.preventDefault()
@@ -155,7 +161,7 @@ import logo from '../assets/img/logo.svg'
 
         if (currentDropdownMenuItem) {
           const currentDropdownList = currentDropdownMenuItem.parentNode
-          const dropdownMenuItems = [...currentDropdownList.querySelectorAll('li')]
+          const dropdownMenuItems = [...currentDropdownList!.querySelectorAll('li')]
           const currentIndex = dropdownMenuItems.findIndex((item) => item === currentDropdownMenuItem)
 
           if (key === 'ArrowDown') {
@@ -180,7 +186,7 @@ import logo from '../assets/img/logo.svg'
 
           if (key === 'Escape') {
             const currentDropdownMenu = (currentDropdownList as Element).previousElementSibling
-            targetItem = currentDropdownMenu.parentNode
+            targetItem = currentDropdownMenu?.parentNode
             closeAllDropdownMenus()
           }
 
@@ -188,19 +194,20 @@ import logo from '../assets/img/logo.svg'
             const currentDropdownMenu = (currentDropdownList as Element).previousElementSibling
 
             if (dropdownMenuItems.indexOf(currentDropdownMenuItem as HTMLLIElement) === dropdownMenuItems.length - 1) {
-              closeDropdownMenu(currentDropdownMenu)
+              if(currentDropdownMenu !== null)
+								closeDropdownMenu(currentDropdownMenu)
             }
           }
         }
 
         if (targetItem) {
-          targetItem.querySelector('a, button, input').focus()
+          (targetItem.querySelector('a, button, input') as HTMLElement)?.focus()
         }
       })
 
     dropdownMenus &&
       dropdownMenus.forEach((dropdownMenu) => {
-        dropdownMenu.addEventListener('click', toggleDropdownMenu)
+        (dropdownMenu as HTMLElement).addEventListener('click', toggleDropdownMenu)
       })
 
     setActiveMenuItem()
@@ -269,6 +276,11 @@ import logo from '../assets/img/logo.svg'
       display: flex;
       align-items: center;
       gap: 1rem;
+    }
+
+    span {
+        font-family: "Gill Sans";
+        color: var(--neutral-100)
     }
 
     nav {
@@ -380,35 +392,6 @@ import logo from '../assets/img/logo.svg'
         background-color: var(--neutral-background);
         border: 2px solid black;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-      }
-    }
-  }
-
-  .darkmode-toggle {
-    padding: 0;
-    border: none;
-
-    svg {
-      width: 30px;
-      margin-top: 4px;
-    }
-
-    svg path {
-      fill: var(--action-color);
-    }
-
-    &:hover {
-      svg path {
-        fill: var(--action-color-state);
-      }
-    }
-
-    &:focus {
-      @include outline;
-
-      &:not(:focus-visible) {
-        outline: none;
-        box-shadow: none;
       }
     }
   }

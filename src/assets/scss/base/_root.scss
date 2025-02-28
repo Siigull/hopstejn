@@ -10,4 +10,8 @@
       --#{$color}-#{$shade}: #{$value};
     }
   }
+
+  .breadcrumbs {
+    background-color: var(--primary-800);
+  }
 }
